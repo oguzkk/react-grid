@@ -1,0 +1,13 @@
+.react-grid-main-wrapper {
+  border: 1px solid;
+  height: 100%;
+  width: 100%;
+  font-size: 20px;
+}
+.react-grid-main-wrapper .react-grid-row {
+  display: flex;
+  border-bottom: 1px solid red;
+}
+.react-grid-main-wrapper .react-grid-cell + .react-grid-cell {
+  border-left: 1px solid red;
+}
