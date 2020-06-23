@@ -7,7 +7,14 @@ function App() {
     <div className="test-div" style={{ width: 500, height: 500 }}>
       <ReactGrid
         sizeColumns={ColumnSizeType.fitToGrid}
-        dataSource={[{ a: 1, b: "B datası" }, { a: 2 }]}
+        dataSource={[
+          {
+            a: 1,
+            b:
+              "B datas sdfasd fasd fasdfdsa sa as fasd fasd asd adsf asdf saf saf sadf saı",
+          },
+          { a: 2 },
+        ]}
         columns={[
           {
             field: "a",

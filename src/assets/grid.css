@@ -8,6 +8,12 @@
   display: flex;
   border-bottom: 1px solid red;
 }
+.react-grid-main-wrapper .react-grid-cell {
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 5px;
+}
 .react-grid-main-wrapper .react-grid-cell + .react-grid-cell {
   border-left: 1px solid red;
 }
