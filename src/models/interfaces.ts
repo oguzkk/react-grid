@@ -17,6 +17,14 @@ export interface IReactGridRowProps {
   columns: IReactGridColumn[];
 }
 
+export interface IReactGridHeaderRowProps {
+  columns: IReactGridColumn[];
+}
+
+export interface IReactGridHeaderCellProps {
+  column: IReactGridColumn;
+}
+
 export interface IReactGridCellProps {
   value: any;
   column: IReactGridColumn;

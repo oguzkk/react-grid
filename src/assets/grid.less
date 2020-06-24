@@ -11,7 +11,7 @@
   }
 
   .react-grid-cell {
-    white-space: pre-wrap;
+    white-space: pre;
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 0 5px;
@@ -19,5 +19,22 @@
 
   .react-grid-cell + .react-grid-cell {
     border-left: 1px solid red;
+  }
+
+  .react-grid-header-row {
+    display: flex;
+    border-bottom: 2px solid blue;
+  }
+
+  .react-grid-header-cell {
+    white-space: pre;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 5px;
+    font-weight: 900;
+  }
+
+  .react-grid-header-cell + .react-grid-header-cell {
+    border-left: 1px solid blue;
   }
 }
