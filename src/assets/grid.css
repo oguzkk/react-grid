@@ -2,13 +2,23 @@
   border: 1px solid;
   height: 100%;
   width: 100%;
+  overflow: auto;
   font-size: 20px;
 }
 .react-grid-main-wrapper .react-grid-row {
-  display: flex;
   border-bottom: 1px solid red;
 }
-.react-grid-main-wrapper .react-grid-cell {
+.react-grid-main-wrapper .react-grid-header-row {
+  border-bottom: 2px solid blue;
+}
+.react-grid-main-wrapper .react-grid-row,
+.react-grid-main-wrapper .react-grid-header-row {
+  width: fit-content;
+  display: flex;
+}
+.react-grid-main-wrapper .react-grid-cell,
+.react-grid-main-wrapper .react-grid-header-cell {
+  box-sizing: border-box;
   white-space: pre;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -17,15 +27,7 @@
 .react-grid-main-wrapper .react-grid-cell + .react-grid-cell {
   border-left: 1px solid red;
 }
-.react-grid-main-wrapper .react-grid-header-row {
-  display: flex;
-  border-bottom: 2px solid blue;
-}
 .react-grid-main-wrapper .react-grid-header-cell {
-  white-space: pre;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0 5px;
   font-weight: 900;
 }
 .react-grid-main-wrapper .react-grid-header-cell + .react-grid-header-cell {

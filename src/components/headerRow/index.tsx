@@ -11,6 +11,7 @@ const HeaderRowComponent = (props: IReactGridHeaderRowProps, ref: any) => {
       {props.columns.map((column: IReactGridColumn, index: number) => {
         return (
           <ReactGridHeaderCell
+            {...props}
             key={index}
             column={column}
           ></ReactGridHeaderCell>

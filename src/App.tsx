@@ -6,7 +6,8 @@ function App() {
   return (
     <div className="test-div" style={{ width: 500, height: 500 }}>
       <ReactGrid
-        sizeColumns={ColumnSizeType.fitToGrid}
+        // sizeColumns={ColumnSizeType.fitToGrid}
+        sizeColumns={ColumnSizeType.autoSize}
         dataSource={[
           {
             a: 1,
@@ -22,6 +23,12 @@ function App() {
           },
           {
             field: "b",
+          },
+          {
+            field: "c",
+          },
+          {
+            field: "d",
           },
         ]}
       ></ReactGrid>

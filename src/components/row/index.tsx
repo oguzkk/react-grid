@@ -8,8 +8,11 @@ const RowComponent = (props: IReactGridRowProps, ref: any) => {
       {props.columns.map((column: IReactGridColumn, index: number) => {
         return (
           <ReactGridCell
+            {...props}
             key={index}
-            value={props.data[column.field]}
+            rowIndex={props.rowIndex}
+            columnIndex={index}
+            row={props.data}
             column={column}
           ></ReactGridCell>
         );

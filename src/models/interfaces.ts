@@ -1,9 +1,14 @@
-import { ColumnSizeType } from "./enums";
+import { MutableRefObject } from "react";
+import { ColumnSizeType, CallBackType } from "./enums";
 
 export interface IReactGridProps {
   dataSource?: any[];
   columns: IReactGridColumn[];
   sizeColumns?: ColumnSizeType;
+}
+
+export interface IReactGridHandles {
+  readonly sizeColumns?: ColumnSizeType;
 }
 
 export interface IReactGridColumn {
@@ -12,20 +17,26 @@ export interface IReactGridColumn {
   width?: number;
 }
 
-export interface IReactGridRowProps {
+interface IReactGridRowBase extends IReactGridProps {
+  callBack: (type: CallBackType) => void;
+}
+
+export interface IReactGridRowProps extends IReactGridRowBase {
+  rowIndex: number;
   data: any;
-  columns: IReactGridColumn[];
 }
 
-export interface IReactGridHeaderRowProps {
-  columns: IReactGridColumn[];
-}
+export interface IReactGridHeaderRowProps extends IReactGridRowBase {}
 
-export interface IReactGridHeaderCellProps {
+interface IReactGridCellBase extends IReactGridProps {
+  callBack: (type: CallBackType) => void;
   column: IReactGridColumn;
 }
 
-export interface IReactGridCellProps {
-  value: any;
-  column: IReactGridColumn;
+export interface IReactGridHeaderCellProps extends IReactGridCellBase {}
+
+export interface IReactGridCellProps extends IReactGridCellBase {
+  rowIndex: number;
+  columnIndex: number;
+  row: any;
 }

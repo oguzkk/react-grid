@@ -1,11 +1,25 @@
-import React, { forwardRef, useState, useEffect, useRef } from "react";
-import { IReactGridProps, IReactGridColumn } from "../../models/interfaces";
+import React, {
+  forwardRef,
+  RefForwardingComponent,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import "../../assets/grid.css";
-import { ReactGridRow } from "../row";
-import { ColumnSizeType } from "../../models/enums";
+import { ColumnSizeType, CallBackType } from "../../models/enums";
+import {
+  IReactGridColumn,
+  IReactGridHandles,
+  IReactGridProps,
+} from "../../models/interfaces";
 import { ReactGridHeaderRow } from "../headerRow";
+import { ReactGridRow } from "../row";
 
-const GridComponent = (props: IReactGridProps, ref: any) => {
+const GridComponent: RefForwardingComponent<
+  IReactGridHandles,
+  IReactGridProps
+> = (props, ref) => {
   const [columns, setColumns] = useState(props.columns);
   const mainWrapperDiv = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -29,16 +43,42 @@ const GridComponent = (props: IReactGridProps, ref: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useImperativeHandle(ref, () => ({
+    get sizeColumns() {
+      return props.sizeColumns;
+    },
+  }));
+
+  const callBack = (callBackType: CallBackType) => {
+    switch (callBackType) {
+      case CallBackType.lastCellRendered: {
+        if (props.sizeColumns === ColumnSizeType.autoSize) {
+          setColumns([...columns]);
+        }
+        break;
+      }
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="react-grid-main-wrapper" ref={mainWrapperDiv}>
-      <ReactGridHeaderRow columns={columns}></ReactGridHeaderRow>
+      <ReactGridHeaderRow
+        {...props}
+        columns={columns}
+        callBack={callBack}
+      ></ReactGridHeaderRow>
       {props.dataSource &&
         props.dataSource.map((rowValue: any, index: number) => {
           return (
             <ReactGridRow
-              key={index}
-              data={rowValue}
+              {...props}
               columns={columns}
+              key={index}
+              callBack={callBack}
+              rowIndex={index}
+              data={rowValue}
             ></ReactGridRow>
           );
         })}
