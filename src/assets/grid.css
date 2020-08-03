@@ -1,5 +1,6 @@
 .react-grid-main-wrapper {
-  border: 1px solid;
+  box-sizing: border-box;
+  outline: 1px solid;
   height: 100%;
   width: 100%;
   overflow: auto;
@@ -24,12 +25,12 @@
   text-overflow: ellipsis;
   padding: 0 5px;
 }
-.react-grid-main-wrapper .react-grid-cell + .react-grid-cell {
-  border-left: 1px solid red;
+.react-grid-main-wrapper .react-grid-cell {
+  border-right: 1px solid red;
 }
 .react-grid-main-wrapper .react-grid-header-cell {
   font-weight: 900;
 }
-.react-grid-main-wrapper .react-grid-header-cell + .react-grid-header-cell {
-  border-left: 1px solid blue;
+.react-grid-main-wrapper .react-grid-header-cell {
+  border-right: 1px solid blue;
 }
