@@ -1,8 +1,20 @@
-import React, { forwardRef, useRef, useEffect } from "react";
-import { IReactGridHeaderCellProps } from "../../models/interfaces";
+import React, {
+  forwardRef,
+  RefForwardingComponent,
+  useEffect,
+  useRef,
+  useImperativeHandle,
+} from "react";
 import { ColumnSizeType } from "../../models/enums";
+import {
+  IReactGridHeaderCellProps,
+  IReactGridHeaderCellHandles,
+} from "../../models/interfaces";
 
-const HeaderCellComponent = (props: IReactGridHeaderCellProps, ref: any) => {
+const HeaderCellComponent: RefForwardingComponent<
+  IReactGridHeaderCellHandles,
+  IReactGridHeaderCellProps
+> = (props, ref) => {
   const reactGridCellInnerDiv = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,14 +33,14 @@ const HeaderCellComponent = (props: IReactGridHeaderCellProps, ref: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [null]);
 
+  useImperativeHandle(ref, () => ({
+    get innerDivRef() {
+      return reactGridCellInnerDiv;
+    },
+  }));
+
   return (
-    <div
-      ref={reactGridCellInnerDiv}
-      className="react-grid-header-cell"
-      style={{
-        width: props.column.width,
-      }}
-    >
+    <div ref={reactGridCellInnerDiv} className="react-grid-header-cell">
       {props.column.header || props.column.field}
     </div>
   );

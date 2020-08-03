@@ -1,17 +1,20 @@
 import React, {
+  createRef,
   forwardRef,
   RefForwardingComponent,
   useEffect,
   useImperativeHandle,
   useRef,
-  useState,
 } from "react";
 import "../../assets/grid.css";
-import { ColumnSizeType, CallBackType } from "../../models/enums";
+import { Constants } from "../../models/constants";
+import { CallBackType, ColumnSizeType } from "../../models/enums";
 import {
   IReactGridColumn,
   IReactGridHandles,
   IReactGridProps,
+  IReactGridRowHandles,
+  IReactGridHeaderRowHandles,
 } from "../../models/interfaces";
 import { ReactGridHeaderRow } from "../headerRow";
 import { ReactGridRow } from "../row";
@@ -20,28 +23,17 @@ const GridComponent: RefForwardingComponent<
   IReactGridHandles,
   IReactGridProps
 > = (props, ref) => {
-  const [columns, setColumns] = useState(props.columns);
   const mainWrapperDiv = useRef<HTMLDivElement>(null);
+  const rowHeaderRef = useRef<IReactGridHeaderRowHandles>(null);
+  const rowRefList = useRef<React.RefObject<IReactGridRowHandles>[]>([]);
+
   useEffect(() => {
-    const mainWrapperWidth =
-      mainWrapperDiv.current?.getBoundingClientRect().width || 0;
-    columns.forEach((column: IReactGridColumn) => {
-      switch (props.sizeColumns) {
-        case ColumnSizeType.autoSize: {
-          break;
-        }
-        case ColumnSizeType.fitToGrid: {
-          column.width = mainWrapperWidth / columns.length;
-          break;
-        }
-        default: {
-          break;
-        }
-      }
-    });
-    setColumns([...columns]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (props.visible === false) {
+      mainWrapperDiv.current!.style.display = "none";
+    } else {
+      mainWrapperDiv.current!.style.display = "block";
+    }
+  }, [props.visible]);
 
   useImperativeHandle(ref, () => ({
     get sizeColumns() {
@@ -52,9 +44,35 @@ const GridComponent: RefForwardingComponent<
   const callBack = (callBackType: CallBackType) => {
     switch (callBackType) {
       case CallBackType.lastCellRendered: {
-        if (props.sizeColumns === ColumnSizeType.autoSize) {
-          setColumns([...columns]);
-        }
+        const mainWrapperWidth =
+          mainWrapperDiv.current?.getBoundingClientRect().width || 0;
+        props.columns.forEach((column: IReactGridColumn) => {
+          switch (props.sizeColumns) {
+            case ColumnSizeType.fixedWidth: {
+              if (column.width === undefined) {
+                column.width = Constants.fixedColumnWidth;
+              }
+              break;
+            }
+            case ColumnSizeType.autoSize: {
+              break;
+            }
+            case ColumnSizeType.fitToGrid: {
+              column.width = mainWrapperWidth / props.columns.length;
+              break;
+            }
+            default: {
+              column.width = mainWrapperWidth / props.columns.length;
+              break;
+            }
+          }
+        });
+        rowRefList.current.forEach(
+          (rowRef: React.RefObject<IReactGridRowHandles>) => {
+            rowRef.current?.rearrangeCellWidths();
+          }
+        );
+        rowHeaderRef.current?.rearrangeCellWidths();
         break;
       }
       default:
@@ -66,15 +84,17 @@ const GridComponent: RefForwardingComponent<
     <div className="react-grid-main-wrapper" ref={mainWrapperDiv}>
       <ReactGridHeaderRow
         {...props}
-        columns={columns}
+        ref={rowHeaderRef}
         callBack={callBack}
       ></ReactGridHeaderRow>
       {props.dataSource &&
         props.dataSource.map((rowValue: any, index: number) => {
+          const rowRef = createRef<IReactGridRowHandles>();
+          rowRefList.current.push(rowRef);
           return (
             <ReactGridRow
               {...props}
-              columns={columns}
+              ref={rowRef}
               key={index}
               callBack={callBack}
               rowIndex={index}

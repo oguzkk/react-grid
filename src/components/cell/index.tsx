@@ -1,8 +1,20 @@
-import React, { forwardRef, useRef, useEffect } from "react";
-import { IReactGridCellProps } from "../../models/interfaces";
+import React, {
+  forwardRef,
+  useRef,
+  useEffect,
+  RefForwardingComponent,
+  useImperativeHandle,
+} from "react";
+import {
+  IReactGridCellProps,
+  IReactGridCellHandles,
+} from "../../models/interfaces";
 import { ColumnSizeType, CallBackType } from "../../models/enums";
 
-const CellComponent = (props: IReactGridCellProps, ref: any) => {
+const CellComponent: RefForwardingComponent<
+  IReactGridCellHandles,
+  IReactGridCellProps
+> = (props, ref) => {
   const reactGridCellInnerDiv = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -13,30 +25,40 @@ const CellComponent = (props: IReactGridCellProps, ref: any) => {
         if (requiredCellWidth > (props.column.width || 0)) {
           props.column.width = requiredCellWidth;
         }
-
-        if (
-          props.dataSource?.length === props.rowIndex + 1 &&
-          props.columns.length === props.columnIndex + 1
-        ) {
-          props.callBack(CallBackType.lastCellRendered);
-        }
         break;
       }
       default:
         break;
     }
+    if (
+      props.dataSource?.length === props.rowIndex + 1 &&
+      props.columns.length === props.columnIndex + 1
+    ) {
+      props.callBack(CallBackType.lastCellRendered);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [null]);
 
+  useImperativeHandle(ref, () => ({
+    get innerDivRef() {
+      return reactGridCellInnerDiv;
+    },
+  }));
+
+  const renderInner = () => {
+    if (props.valueFormatter) {
+      return props.valueFormatter({
+        value: props.row[props.column.field],
+        rowData: props.row,
+        column: props.column,
+      });
+    }
+    return props.row[props.column.field];
+  };
+
   return (
-    <div
-      ref={reactGridCellInnerDiv}
-      className="react-grid-cell"
-      style={{
-        width: props.column.width,
-      }}
-    >
-      {props.row[props.column.field]}
+    <div ref={reactGridCellInnerDiv} className="react-grid-cell">
+      {renderInner()}
     </div>
   );
 };
