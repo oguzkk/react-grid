@@ -19,15 +19,19 @@ const CellComponent: RefForwardingComponent<
 
   useEffect(() => {
     switch (props.sizeColumns) {
-      case ColumnSizeType.autoSize: {
+      case ColumnSizeType.fitToGrid: {
+        break;
+      }
+      case ColumnSizeType.fixedWidth: {
+        break;
+      }
+      case ColumnSizeType.autoSize:
+      default:
         const requiredCellWidth =
           reactGridCellInnerDiv.current!.scrollWidth + 5;
         if (requiredCellWidth > (props.column.width || 0)) {
           props.column.width = requiredCellWidth;
         }
-        break;
-      }
-      default:
         break;
     }
     if (

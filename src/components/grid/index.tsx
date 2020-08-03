@@ -62,7 +62,6 @@ const GridComponent: RefForwardingComponent<
               break;
             }
             default: {
-              column.width = mainWrapperWidth / props.columns.length;
               break;
             }
           }
